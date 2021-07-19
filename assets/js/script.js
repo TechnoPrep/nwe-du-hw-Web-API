@@ -14,8 +14,6 @@ const questions = [
 
 const correctAnswers = ['alerts','all of the above','parenthesis','quotes']
 
-let answer = '';
-
 //Start Quiz Function
 
 function startQuiz(){
@@ -43,10 +41,11 @@ function startQuiz(){
     sQBtn.attr('class', 'quiz-btn');
     sQDiv.append(sQBtn);
 
-    $(sQBtn).click(function(){
+    $(sQBtn).click(function(event){
+        event.stopPropagation();
         $('#quiz-start').remove();
         startTimer();
-        Question();
+        nextQuestion();
     });
 
     
@@ -59,8 +58,7 @@ function startTimer(answerResult){
     let timeInterval = setInterval(function () {
       timeLeft--;
       timerEl.text('Time Left: ' + timeLeft);
-      
-      
+            
       if(timeLeft === 0){
   
         // timerEl.textContent = '';
@@ -70,13 +68,9 @@ function startTimer(answerResult){
       }
       //
     },1000);
-
-    if(answerResult === false){
-        timeLeft -= 10;
-    }
 }
 
-function Question(){    
+function nextQuestion(){    
     let QuestDiv = $('<div>');
     let QuestH2 = $('<h2>');
     let QuestUl = $('<ul>');
@@ -95,23 +89,38 @@ function Question(){
 
     //Create the Answers from the question array
     for (let index = 1; index < questions[i].length; index++) {
-        AnswerBtn = $('<button>')
+        AnswerBtn = $('<input>')
         AnswerBtn.text(questions[i][index]);
         AnswerBtn.addClass('btn answerbutton');
-        AnswerBtn.attr('data-answer', `a-${index}`);
-        AnswerBtn.attr('value', questions[i][index]);
+        AnswerBtn.attr('type', 'button')
+        AnswerBtn.attr('id', `btn${index}`);
+        AnswerBtn.val(questions[i][index]);
         QuestUl.append(AnswerBtn);
 
     }
 
-    $(AnswerBtn).click(function(event){
-        answer = $(event.target).attr('answerbutton');
+    //return the value of the clicked button
+    $('input').click(function(event){
+        event.stopPropagation();
+        let answer = $(event.target).val();
         console.log(answer);
+        answerCheck(answer);
+        $(`#question-${i}`).remove()
+        qIndex++;
+        nextQuestion();
+        //qIndex < questions.length ? nextQuestion() : displayScore();
     });
 
 
 }
 
+//Check if the Answer is Correct for the Indexed Quesiton
+function answerCheck(AnswerToCheck){
+    let i = qIndex
 
+    if(AnswerToCheck !== correctAnswers[i]){
+        timeLeft -= 10;
+    } 
+}
 
 startQuiz();
