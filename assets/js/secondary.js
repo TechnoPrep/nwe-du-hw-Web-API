@@ -1,41 +1,44 @@
 let scoreList = $('.score-list');
-let newPlayerName = localStorage.getItem('player')
+let newPlayerName = localStorage.getItem('player');
 let newPlayerScore = localStorage.getItem('time');
 
 let newPlayerArr = [newPlayerName,newPlayerScore];
 
-let totalPlayerArr = [];
+// let totalPlayerArr = [];
+
+let tempArr = [];
 
 //Start Quiz Function
 
 function showScores(){
 
     let scoreItem = $('<li>');
-    
-    //Push newPlayerArr to totalPlayerArr
-    totalPlayerArr.push(newPlayerArr);
 
-    //Storing totalPlayerArr to localStorage
-    localStorage.setItem('totalPlayerArr', JSON.stringify(totalPlayerArr));
-    // newPlayerArr = [];
-    
-    arr = JSON.parse(localStorage.getItem('totalPlayerArr'));
+    if(newPlayerName !== null && newPlayerScore !== null ){
 
-    localStorage.setItem('totalPlayerArr', JSON.stringify(arr));
+        //Pull tempArr containing values from totalPlayerArr localStorage
+        tempArr = JSON.parse(localStorage.getItem('totalPlayerArr')) || [];
 
-    // Checks if the totalPlayerArr is blank
+        //Push newPlayerArr to tempArr
+        tempArr.push(newPlayerArr);
 
-    // saveScoreToLocalStorage();
-
-    if(totalPlayerArr[0][0] !== null){
-
-        for (let i = 0; i < arr.length; i++) {
-            scoreItem = $('<li>');
-            scoreItem.addClass('score-item')
-            scoreItem.text(arr[i][0] + ' - ' + arr[i][1]);
-            scoreList.append(scoreItem);
-        }
+        localStorage.setItem('totalPlayerArr', JSON.stringify(tempArr))
     }
+
+    totalPlayerArr = JSON.parse(localStorage.getItem('totalPlayerArr')) || [];
+    
+    for (let i = 0; i < totalPlayerArr.length; i++) {
+        scoreItem = $('<li>');
+
+        scoreItem.addClass('score-item')
+        scoreItem.text(totalPlayerArr[i][0] + ' - ' + totalPlayerArr[i][1]);
+        scoreList.append(scoreItem);
+    }
+
+    tempArr = [];
+
+    localStorage.removeItem('player');
+    localStorage.removeItem('time');
 
     //Add Text to the Elements    
 
@@ -50,11 +53,6 @@ function showScores(){
         $('.score-item').remove();
     });
     
-}
-
-function saveScoreToLocalStorage(){
-
-
 }
 
 showScores();
