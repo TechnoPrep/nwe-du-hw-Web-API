@@ -17,6 +17,20 @@ const questions = [
 
 const correctAnswers = ['alerts','all of the above','parenthesis','quotes']
 
+const QuestionsObjs = [
+    {
+        quest: "question 1",
+        answ1: "answer 1",
+        correct: "correct ans"
+    },
+    {
+        quest: "question 2",
+        answ1: "answer 1",
+        correct: "correct ans"
+    }
+    
+]
+// iterate over QuestionsObjs so that QuestionsObjs[i].quest, QuestionsObjs[i].answi
 //Start Quiz Function
 
 function startQuiz(){
@@ -114,6 +128,8 @@ function nextQuestion(){
 
     }
 
+
+
     //return the value of the clicked button
     $('input').click(function(event){
 
@@ -132,6 +148,7 @@ function nextQuestion(){
 function answerCheck(AnswerToCheck){
     let i = qIndex
 
+    //AnswerToCheck !== QuestionsObj[i].correctAnswer
     if(AnswerToCheck !== correctAnswers[i]){
         timeLeft -= 10;
     } 
