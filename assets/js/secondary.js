@@ -1,10 +1,13 @@
 let scoreList = $('.score-list');
+
 let newPlayerName = localStorage.getItem('player');
 let newPlayerScore = localStorage.getItem('time');
 
-let newPlayerArr = [newPlayerName,newPlayerScore];
-
+let newPlayerObj = {};
 let tempArr = [];
+
+newPlayerObj.player = newPlayerName;
+newPlayerObj.score = newPlayerScore;
 
 //Start Quiz Function
 
@@ -19,7 +22,7 @@ function showScores(){
         tempArr = JSON.parse(localStorage.getItem('totalPlayerArr')) || [];
 
         //Push newPlayerArr to tempArr
-        tempArr.push(newPlayerArr);
+        tempArr.push(newPlayerObj);
 
         //Push tempArr back 
         localStorage.setItem('totalPlayerArr', JSON.stringify(tempArr))
@@ -30,14 +33,15 @@ function showScores(){
 
     //Sort by the Highest Score
     sortedArr = totalPlayerArr.sort(function(a,b){
-        return b[1] - a[1];
+        return b.score - a.score;
     })
     
+    //Create List Elements
     for (let i = 0; i < sortedArr.length; i++) {
         scoreItem = $('<li>');
 
         scoreItem.addClass('score-item')
-        scoreItem.text(sortedArr[i][0] + ' - ' + sortedArr[i][1]);
+        scoreItem.text(sortedArr[i].player + ' - ' + sortedArr[i].score);
         scoreList.append(scoreItem);
     }
 
