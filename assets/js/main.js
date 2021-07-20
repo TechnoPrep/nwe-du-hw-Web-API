@@ -8,29 +8,42 @@ let timeLeft = 100;
 
 let qIndex = 0;
 
-const questions = [
-    ['Commonly used data types DO NOT include: ','strings','booleans','alerts','numbers'],
-    ['Arrays in JavaScript can be used to store _____.','numbers and strings', 'other arrays','booleans','all of the above'],
-    ['The condition in an if / else statement is enclosed within _____.', 'quotes','curly brackets','parenthesis','square brackets'],
-    ['String values must be enclosed within _____ when being assigned to variables', 'commas','curly brackets','quotes','parenthesis']
-]
-
-const correctAnswers = ['alerts','all of the above','parenthesis','quotes']
-
 const QuestionsObjs = [
     {
-        quest: "question 1",
-        answ1: "answer 1",
-        correct: "correct ans"
+        quest: "Commonly used data types DO NOT include: ",
+        ans1: "strings",
+        ans2: "booleans",
+        ans3: "alerts",
+        ans4: "numbers",
+        correct: "alerts"
     },
     {
-        quest: "question 2",
-        answ1: "answer 1",
-        correct: "correct ans"
+        quest: "Arrays in JavaScript can be used to store _____.",
+        ans1: "numbers and strings",
+        ans2: "other arrays",
+        ans3: "booleans",
+        ans4: "all of the above",
+        correct: "all of the above"
+    },
+    {
+        quest: "The condition in an if / else statement is enclosed within _____.",
+        ans1: "quotes",
+        ans2: "curly brackets",
+        ans3: "parenthesis",
+        ans4: "square brackets",
+        correct: "parenthesis"
+    },
+    {
+        quest: "String values must be enclosed within _____ when being assigned to variables",
+        ans1: "commas",
+        ans2: "curly brackets",
+        ans3: "quotes",
+        ans4: "parenthesis",
+        correct: "quotes"
     }
     
 ]
-// iterate over QuestionsObjs so that QuestionsObjs[i].quest, QuestionsObjs[i].answi
+
 //Start Quiz Function
 
 function startQuiz(){
@@ -58,6 +71,7 @@ function startQuiz(){
     sQBtn.attr('class', 'quiz-btn');
     sQDiv.append(sQBtn);
 
+    //Start Timer and Proceed to Questions
     $(sQBtn).click(function(event){
         event.stopPropagation();
         $('#quiz-start').remove();
@@ -65,7 +79,6 @@ function startQuiz(){
         nextQuestion();
     });
 
-    
 }
 
 startQuiz();
@@ -91,10 +104,8 @@ function startTimer(){
 
         //Display Score
         displayScore();
-  
       }
       
-      //
     },1000);
 }
 
@@ -110,33 +121,39 @@ function nextQuestion(){
     QuestDiv.attr('id',`question-${i}`);
     quizEl.append(QuestDiv);
 
-    QuestH2.text(questions[i][0]);
+    // QuestH2.text(questions[i][0]);
+    QuestH2.text(QuestionsObjs[i].quest)
     QuestDiv.append(QuestH2);
 
     QuestDiv.append(QuestUl);
 
     //Create the Answers from the question array
-    for (let index = 1; index < questions[i].length; index++) {
+    for (let index = 0; index < Object.keys(QuestionsObjs[i]).length; index++) {
         
-        AnswerBtn = $('<input>')
-        AnswerBtn.text(index + '). ' + questions[i][index]);
-        AnswerBtn.addClass('btn answerbutton');
-        AnswerBtn.attr('type', 'button')
-        AnswerBtn.attr('id', `btn${index}`);
-        AnswerBtn.val(questions[i][index]);
-        QuestUl.append(AnswerBtn);
+        //Create a dynamic variable to use for object key
+        objKey = `ans${index}`;
 
+        //Check if Object key exists in current object
+        if(objKey in QuestionsObjs[i]){
+
+            //Create Answer button
+            AnswerBtn = $('<input>');
+            AnswerBtn.text(QuestionsObjs[i][objKey]);
+            AnswerBtn.addClass('btn answerbutton');
+            AnswerBtn.attr('type', 'button')
+            AnswerBtn.attr('id', `btn${index}`);
+            AnswerBtn.val(QuestionsObjs[i][objKey]);
+            QuestUl.append(AnswerBtn);
+        }
     }
-
-
 
     //return the value of the clicked button
     $('input').click(function(event){
 
         event.stopPropagation();
 
+        //Creates answer value to pass through answerCheck function
         let answer = $(event.target).val();
-
         answerCheck(answer);
 
     });
@@ -149,7 +166,7 @@ function answerCheck(AnswerToCheck){
     let i = qIndex
 
     //AnswerToCheck !== QuestionsObj[i].correctAnswer
-    if(AnswerToCheck !== correctAnswers[i]){
+    if(AnswerToCheck !== QuestionsObjs[i].correct){
         timeLeft -= 10;
     } 
 
@@ -159,7 +176,7 @@ function answerCheck(AnswerToCheck){
 
     // Check if there are any more quesitons
     // If false, display score
-    if(qIndex < questions.length){
+    if(qIndex < QuestionsObjs.length){
         //Advance To next Question
         nextQuestion();
     } else {
@@ -218,8 +235,6 @@ function displayScore(){
     // scoreSubmit.attr('type', 'submit');
 
     let playerEl = $('input[name=initials]');
-    
-    
     
     $('#submit').click(function(event){
         event.preventDefault();
