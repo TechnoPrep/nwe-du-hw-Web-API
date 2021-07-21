@@ -4,16 +4,12 @@ let timerEl = $('#timer');
 let gameDone = false;
 
 let timeLeft = 100;
-// let score = localStorage.getItem("time");
 
 let qIndex = 0;
 
 let totalCorrect = 0;
 let totalWrong = 0;
 let score = 0;
-
-console.log(totalWrong);
-console.log(totalCorrect);
 
 const QuestionsObjs = [
     {
@@ -67,15 +63,16 @@ function startQuiz(){
 
     //Append Elements to quizEl and add Attr
     sQDiv.attr('id', 'quiz-start')
+    sQDiv.attr('class', 'start-page center')
     quizEl.append(sQDiv);
     
-    sQH2.attr('class', 'quiz-header');
+    sQH2.addClass('quiz-header retro');
     sQDiv.append(sQH2);
     
     sQText.attr('class', 'quiz-text');
     sQDiv.append(sQText);
     
-    sQBtn.attr('class', 'quiz-btn');
+    sQBtn.addClass('btn quiz-btn');
     sQDiv.append(sQBtn);
 
     //Start Timer and Proceed to Questions
@@ -90,7 +87,6 @@ function startQuiz(){
 
 startQuiz();
 
-//
 function timer(){
 
     // TODO: Use the `setInterval()` method to call a function to be executed every 1000 milliseconds
@@ -101,10 +97,18 @@ function timer(){
         timerEl.text('Time Left: ' + timeLeft);
         }
 
-      if(timeLeft === 0){
-  
-        //prevent timer from going past zero
+      if(timeLeft === 0 || timeLeft < 0){
+        
+        //Set timeLeft to 0
+        timeLeft = 0;
+        timerEl.text('Time Left: ' + timeLeft);
+
+        //Prevent timer from going past zero
         clearInterval(timeInterval);
+
+        //If Timer Hits Zero, Remove Current Element
+        gameOver();
+
       }
       
     },1000);
@@ -116,35 +120,42 @@ function nextQuestion(){
     let QuestUl = $('<ol>');
     let AnswerBtn = $('<button>');
 
-    let i = qIndex;
-
     //Add Text to the Elements
-    QuestDiv.attr('id',`question-${i}`);
+    QuestDiv.attr('id',`question-${qIndex}`);
+    QuestDiv.addClass('question center');
+
+
     quizEl.append(QuestDiv);
 
-    // QuestH2.text(questions[i][0]);
-    QuestH2.text(QuestionsObjs[i].quest)
+    QuestH2.text(QuestionsObjs[qIndex].quest)
+    QuestH2.addClass('retro')
     QuestDiv.append(QuestH2);
 
+    QuestUl.addClass('ans-list')
     QuestDiv.append(QuestUl);
 
     //Create the Answers from the question array
-    for (let index = 0; index < Object.keys(QuestionsObjs[i]).length; index++) {
+    for (let index = 0; index < Object.keys(QuestionsObjs[qIndex]).length; index++) {
         
         //Create a dynamic variable to use for object key
         objKey = `ans${index}`;
 
         //Check if Object key exists in current object
-        if(objKey in QuestionsObjs[i]){
+        if(objKey in QuestionsObjs[qIndex]){
 
             //Create Answer button
             AnswerBtn = $('<input>');
-            AnswerBtn.text(QuestionsObjs[i][objKey]);
-            AnswerBtn.addClass('btn answerbutton');
+            AnswerBtn.text(QuestionsObjs[qIndex][objKey]);
+            AnswerBtn.addClass('btn');
             AnswerBtn.attr('type', 'button')
             AnswerBtn.attr('id', `btn${index}`);
-            AnswerBtn.val(QuestionsObjs[i][objKey]);
-            QuestUl.append(AnswerBtn);
+            AnswerBtn.val(QuestionsObjs[qIndex][objKey]);
+
+            QuestLi = $('<li>');
+            QuestLi.addClass('ans-item')
+            QuestLi.append(AnswerBtn);
+
+            QuestUl.append(QuestLi);
         }
     }
 
@@ -161,19 +172,12 @@ function nextQuestion(){
 
 }
 
-
-/**
- * Check if the Answer is Correct for the Indexed Quesiton
- * @param {*} AnswerToCheck 
- */
-
+//Check answerToCheck against the selected objects 'correct' objKey
 function answerCheck(AnswerToCheck){
-    
-    let i = qIndex
 
     //AnswerToCheck !== QuestionsObj[i].correctAnswer
     //If Answer is wrong increment totalWrong to increase penalty
-    if(AnswerToCheck !== QuestionsObjs[i].correct){
+    if(AnswerToCheck !== QuestionsObjs[qIndex].correct){
         
         totalWrong++
 
@@ -188,7 +192,7 @@ function answerCheck(AnswerToCheck){
     }
 
     //Remove Current Question
-    $(`#question-${i}`).remove()
+    $(`#question-${qIndex}`).remove()
 
     //Increment qIndex to advance to the next question
     qIndex++;
@@ -212,10 +216,12 @@ function answerCheck(AnswerToCheck){
         //run timer
         timer();
 
-        //If Timer Hits Zero, Remove Current Element
-        gameOver();
 
-    } else {
+    } else if(timeLeft < 0) {
+
+        timer();
+
+    }else {
         
         pauseTimer();
         
@@ -229,9 +235,11 @@ function displayScore(){
 
     let scoreDiv = $('<div>');
     let scoreH2 = $('<h2>');
+    let scoreH3 = $('<h3>');
     let scoreText = $('<p>');
     let scoreForm = $('<form>');
     let scoreFormText = $('<p>')
+    let scoreFormLine = $('<p>')
     let scoreName = $('<input>');
     let scoreSubmit = $('<button>');
 
@@ -242,12 +250,14 @@ function displayScore(){
     localStorage.setItem('score', score);
     
     //Add Text to the Elements
-    scoreDiv.addClass('score')
+    scoreDiv.addClass('score center')
     quizEl.append(scoreDiv);
 
-    scoreH2.text('You have compelted the Quiz! See Your score below!');
-    scoreH2.addClass('score-header')
+    scoreH2.text('You have completed the Quiz!');
+    scoreH3.text('See Your score below!')
+    scoreH2.addClass('score-header retro')
     scoreDiv.append(scoreH2);
+    scoreH2.append(scoreH3);
 
     scoreText.text('Your Final Score is ' + localStorage.getItem('score'));
     scoreText.addClass('score-text')
@@ -257,16 +267,19 @@ function displayScore(){
     scoreFormText.text('Enter Initials: ');
     scoreForm.append(scoreFormText);
     scoreForm.append(scoreName);
-    scoreForm.append(scoreSubmit);
+    scoreForm.append(scoreFormLine)
+    scoreFormLine.append(scoreSubmit);
 
     scoreName.attr('id', 'initals');
     scoreName.attr('name', 'initials');
     scoreName.attr('type', 'text');
+    scoreName.addClass('initials')
     
 
     scoreSubmit.attr('id', 'submit');
+    scoreSubmit.addClass('btn');
     scoreSubmit.text('Submit');
-    // scoreSubmit.attr('type', 'submit');
+    scoreSubmit.attr('type', 'submit');
 
     let playerEl = $('input[name=initials]');
     
@@ -297,15 +310,16 @@ function gameOver(){
     let gameOverSubmit = $('<button>');
     
     //Add Text to the Elements
-    gameOverDiv.addClass('gameOver')
+    gameOverDiv.addClass('gameOver center')
     
     gameOverH2.text('GAME OVER!');
-    gameOverH2.addClass('gameOver-header')
+    gameOverH2.addClass('gameOver-header retro')
 
     gameOverText.text('Would you like to play again?');
     gameOverText.addClass('gameOver-text')
 
     gameOverSubmit.attr('id', 'try-again');
+    gameOverSubmit.addClass('btn');
     gameOverSubmit.text('Try Again');
 
     quizEl.append(gameOverDiv);
