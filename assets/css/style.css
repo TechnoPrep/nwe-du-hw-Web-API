@@ -1,0 +1,129 @@
+
+@import url(https://fonts.googleapis.com/css?family=Mr+Dafoe);
+@import url(https://fonts.googleapis.com/css?family=Titillium+Web:900);
+@import url(https://fonts.googleapis.com/css?family=Righteous);
+@import url(https://fonts.googleapis.com/css?family=Candal);
+
+@import url(https://fonts.googleapis.com/css?family=Permanent+Marker);
+
+@import url(https://fonts.googleapis.com/css?family=Monoton);
+
+html {
+    font-size: 62.5%;
+}
+
+body {
+    background-color: #0D0221;
+}
+
+h2 {
+    font-size: 10rem;
+    margin-top: 5rem;
+}
+
+h3 {
+    font-size: 7rem;
+}
+
+p {
+    text-align: center;
+}
+
+.score-text,
+.quiz-text,
+#timer,
+.score-list,
+.view-highscores a {
+    font-size: 3rem;
+    text-transform: uppercase;
+    -webkit-text-fill-color: white;
+    -webkit-text-stroke: 0.1px #f1f1f1;
+    font-family: 'Righteous', cursive;
+}
+
+.view-highscores a:hover,
+.retro {
+    text-transform: uppercase;
+    text-align: center;
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke: 0.1px #f1f1f1;
+    font-family: 'Righteous', cursive;
+    -webkit-background-clip: text;
+    background-clip: text;
+    background-image: -webkit-linear-gradient(#C3BFB4 0%, #FDFCFA 50%, #E8E7E5 51%, #757172 52%, #E8E9DB 100%);
+    -webkit-filter: drop-shadow(2px 2px 15px #3F59F4);
+    filter: drop-shadow(2px 2px 15px #3F59F4);
+}
+
+
+/* Header Styling */
+header {
+    position: relative;
+    width: 100%;
+    display: inline
+    /* height: 50px;     */
+}
+
+/* Default Container Styling */
+.container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.vp-100 {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+}
+
+/* Align-text */
+.center {
+    text-align: center;
+}
+
+/* List Item Sytling */
+
+.ans-list,
+.score-list {
+    padding-inline-start: 0px;
+}
+
+.score-list {
+    align-items: center;
+}
+
+.high-scores {
+    position: absolute;
+    top: 0;
+}
+
+.score-list,
+.ans-item {
+    justify-content: center;
+    list-style: none;
+    padding-bottom: 30px;
+}
+
+/* displayScore and Button styling */
+.initials,
+.btn {
+    width: 500px;
+    margin: 10px;
+}
+
+.initials {
+    padding: 1rem;
+    font-size: 4rem;
+}
+
+/* Button Styling */
+.btn,
+#go-back,
+#clear {
+    color: black;
+    font-size: 3rem;
+    font-weight: bold;
+    border-radius: 5px;
+    filter: drop-shadow(2px 2px 15px #3F59F4);
+}
