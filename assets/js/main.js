@@ -166,6 +166,7 @@ function nextQuestion(){
  * Check if the Answer is Correct for the Indexed Quesiton
  * @param {*} AnswerToCheck 
  */
+
 function answerCheck(AnswerToCheck){
     
     let i = qIndex
@@ -175,11 +176,15 @@ function answerCheck(AnswerToCheck){
     if(AnswerToCheck !== QuestionsObjs[i].correct){
         
         totalWrong++
+
         let decrease = totalWrong * 10;
+
         timeLeft -= decrease;
 
     } else {
+
         totalCorrect++;
+
     }
 
     //Remove Current Question
@@ -208,9 +213,7 @@ function answerCheck(AnswerToCheck){
         timer();
 
         //If Timer Hits Zero, Remove Current Element
-        
         gameOver();
-        
 
     } else {
         
