@@ -8,6 +8,13 @@ let timeLeft = 100;
 
 let qIndex = 0;
 
+let totalCorrect = 0;
+let totalWrong = 0;
+let score = 0;
+
+console.log(totalWrong);
+console.log(totalCorrect);
+
 const QuestionsObjs = [
     {
         quest: "Commonly used data types DO NOT include: ",
@@ -75,7 +82,7 @@ function startQuiz(){
     $(sQBtn).click(function(event){
         event.stopPropagation();
         $('#quiz-start').remove();
-        startTimer();
+        timer();
         nextQuestion();
     });
 
@@ -83,8 +90,8 @@ function startQuiz(){
 
 startQuiz();
 
-//Start Timer Function
-function startTimer(){
+//
+function timer(){
 
     // TODO: Use the `setInterval()` method to call a function to be executed every 1000 milliseconds
     
@@ -93,17 +100,11 @@ function startTimer(){
         timeLeft--;
         timerEl.text('Time Left: ' + timeLeft);
         }
-            
+
       if(timeLeft === 0){
   
         //prevent timer from going past zero
         clearInterval(timeInterval);
-
-        //If Timer Hits Zero, Remove Current Element
-        $(`#question-${qIndex}`).remove();
-
-        //Display Score
-        displayScore();
       }
       
     },1000);
@@ -158,37 +159,62 @@ function nextQuestion(){
 
     });
 
-
 }
 
-//Check if the Answer is Correct for the Indexed Quesiton
+
+/**
+ * Check if the Answer is Correct for the Indexed Quesiton
+ * @param {*} AnswerToCheck 
+ */
 function answerCheck(AnswerToCheck){
+    
     let i = qIndex
 
     //AnswerToCheck !== QuestionsObj[i].correctAnswer
+    //If Answer is wrong increment totalWrong to increase penalty
     if(AnswerToCheck !== QuestionsObjs[i].correct){
-        timeLeft -= 10;
-    } 
+        
+        totalWrong++
+        let decrease = totalWrong * 10;
+        timeLeft -= decrease;
 
+    } else {
+        totalCorrect++;
+    }
+
+    //Remove Current Question
     $(`#question-${i}`).remove()
 
+    //Increment qIndex to advance to the next question
     qIndex++;
+
+    //Prevent timeLeft from going below 0 by answer Questions incorrectly
+    if(timeLeft < 0){
+        timeLeft = 0;
+    }
 
     // Check if there are any more quesitons
     // If false, display score
     if(qIndex < QuestionsObjs.length){
         //Advance To next Question
         nextQuestion();
-    } else {
+
+    } else if(totalWrong === QuestionsObjs.length){
         
         //Pause Timer
-        gameDone = true;
+        pauseTimer();
 
-        //Display Timer Properly in Time Left
-        timerEl.text('Time Left: ' + timeLeft);
+        //run timer
+        timer();
 
-        //Store Score in LocalStorage
-        localStorage.setItem("time",timeLeft);
+        //If Timer Hits Zero, Remove Current Element
+        
+        gameOver();
+        
+
+    } else {
+        
+        pauseTimer();
         
         //Display Score
         displayScore();
@@ -206,6 +232,11 @@ function displayScore(){
     let scoreName = $('<input>');
     let scoreSubmit = $('<button>');
 
+    let time = localStorage.getItem('time');
+
+    let score = (totalCorrect + time) * 252;
+
+    localStorage.setItem('score', score);
     
     //Add Text to the Elements
     scoreDiv.addClass('score')
@@ -215,7 +246,7 @@ function displayScore(){
     scoreH2.addClass('score-header')
     scoreDiv.append(scoreH2);
 
-    scoreText.text('Your Final Score is ' + localStorage.getItem('time'));
+    scoreText.text('Your Final Score is ' + localStorage.getItem('score'));
     scoreText.addClass('score-text')
     scoreDiv.append(scoreText);
 
@@ -240,6 +271,51 @@ function displayScore(){
         event.preventDefault();
         localStorage.setItem('player',playerEl.val());
         $(window).attr('location', 'highscores.html');
+    });
+
+}
+
+function pauseTimer(){
+    //Pause Timer
+    gameDone = true
+    //Display Timer Properly in Time Left
+    timerEl.text('Time Left: ' + timeLeft);
+    //Store Score in LocalStorage
+    localStorage.setItem("time",timeLeft);
+}
+
+function gameOver(){
+
+    $(`#question-${qIndex}`).remove();
+
+    let gameOverDiv = $('<div>');
+    let gameOverH2 = $('<h2>');
+    let gameOverText = $('<p>');
+    let gameOverSubmit = $('<button>');
+    
+    //Add Text to the Elements
+    gameOverDiv.addClass('gameOver')
+    
+    gameOverH2.text('GAME OVER!');
+    gameOverH2.addClass('gameOver-header')
+
+    gameOverText.text('Would you like to play again?');
+    gameOverText.addClass('gameOver-text')
+
+    gameOverSubmit.attr('id', 'try-again');
+    gameOverSubmit.text('Try Again');
+
+    quizEl.append(gameOverDiv);
+    gameOverDiv.append(gameOverH2);
+    gameOverDiv.append(gameOverText);
+    gameOverDiv.append(gameOverSubmit);    
+
+
+    // gameOverSubmit.attr('type', 'submit');
+    
+    $('#try-again').click(function(event){
+        event.preventDefault();
+        window.location.reload();
     });
 
 }
