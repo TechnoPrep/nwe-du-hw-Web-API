@@ -58,7 +58,7 @@ function startQuiz(){
 
     //Add Text to the Elements
     sQH2.text('Coding Quiz Challenge');
-    sQText.text('Try to answer the following code-related questions within the time limit Keep in mind that incorrect answer will penalize your scrore/time by then seconds!');
+    sQText.text('Try to answer the following code-related questions within the time limit Keep in mind that incorrect answer will reduce your total time to answer questions. The more incorrect answers the more time gets removed!');
     sQBtn.text('Start Quiz');
 
     //Append Elements to quizEl and add Attr
