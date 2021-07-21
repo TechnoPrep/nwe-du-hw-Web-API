@@ -1,7 +1,7 @@
 let scoreList = $('.score-list');
 
 let newPlayerName = localStorage.getItem('player');
-let newPlayerScore = localStorage.getItem('time');
+let newPlayerScore = localStorage.getItem('score');
 
 let newPlayerObj = {};
 let tempArr = [];
