@@ -1,4 +1,4 @@
-# nwe-du-hu-Javascript
+# nwe-du-hu-Web-API
 
 ## Description
 This application is built to help you challenge youself on your coding knowlege by taking a short quiz to see if you can get the highest score. Your Highests scores are visible on the "High Scores" page, with the highest scores on top!
