@@ -263,6 +263,7 @@ function displayScore(){
     scoreDiv.append(scoreText);
 
     scoreDiv.append(scoreForm);
+    scoreFormText.addClass('score-text')
     scoreFormText.text('Enter Initials: ');
     scoreForm.append(scoreFormText);
     scoreForm.append(scoreName);
@@ -272,6 +273,7 @@ function displayScore(){
     scoreName.attr('id', 'initals');
     scoreName.attr('name', 'initials');
     scoreName.attr('type', 'text');
+    scoreName.attr('maxlength', '3')
     scoreName.addClass('initials')
     
 
