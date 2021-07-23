@@ -109,6 +109,7 @@ function timer(){
         //If Timer Hits Zero, Remove Current Element
         gameOver();
 
+        console.log('I got here');
       }
       
     },1000);
@@ -213,11 +214,9 @@ function answerCheck(AnswerToCheck){
         //Pause Timer
         pauseTimer();
 
-        //run timer
-        timer();
-
-
     } else if(timeLeft < 0) {
+
+        pauseTimer();
 
         timer();
 
