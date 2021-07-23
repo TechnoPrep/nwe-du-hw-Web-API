@@ -8,8 +8,8 @@ Motivation / Inspiration:
 
 ## Screenshot
 
-![Nathaniel's Coding Challenge Quiz](https://technoprep.github.io/nwe-du-hw-Web-API/)
+![Nathaniel's Coding Challenge Quiz](https://github.com/TechnoPrep/nwe-du-hw-Web-API/blob/main/screenshots/Coding_Quiz_Challenge_Screenshot.png)
 
 ## Website Address
 
-[Nathaniel's Coding Challenge Quiz](https://github.com/TechnoPrep/nwe-du-hw-Web-API/blob/main/screenshots/Coding_Quiz_Challenge_Screenshot.png)
+[Nathaniel's Coding Challenge Quiz](https://technoprep.github.io/nwe-du-hw-Web-API/)
