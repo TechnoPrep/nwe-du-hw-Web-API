@@ -115,6 +115,7 @@ header {
 .initials {
     padding: 1rem;
     font-size: 4rem;
+    text-transform: uppercase;
 }
 
 /* Button Styling */
